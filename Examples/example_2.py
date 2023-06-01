@@ -1,13 +1,14 @@
 
 
-
-from CRFE._crfe import CRFE
 from sklearn.svm import SVR, LinearSVC
 from sklearn.datasets import make_classification
 import numpy as np
 from scipy.stats import zscore
 from sklearn.model_selection import train_test_split
 import pandas as pd
+
+sys.path.insert(0, "../") 
+from CRFE._crfe import CRFE
 
 url = "https://raw.githubusercontent.com/jbrownlee/Datasets/master/pima-indians-diabetes.data.csv"
 names = ['preg', 'plas', 'pres', 'skin', 'test', 'mass', 'pedi', 'age', 'class']
