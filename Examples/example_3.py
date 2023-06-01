@@ -1,16 +1,14 @@
 
+import numpy as np
 
-from CRFE._crfe import CRFE
 from sklearn.svm import SVR, LinearSVC
 from sklearn.datasets import make_classification
-import numpy as np
 from sklearn.utils import shuffle
 from sklearn.model_selection import train_test_split
-import pandas as pd
-
-
-
 from sklearn.datasets import load_breast_cancer
+
+sys.path.insert(0, "../") 
+from CRFE._crfe import CRFE
 
 
 # load dataset
