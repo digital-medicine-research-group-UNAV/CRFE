@@ -2,7 +2,7 @@
 
 # CRFE - Conformal Recursive Feature Selection
 
-*CRFE*  is the recursive adaptation of the SMFS feature selection method developed by [1],[2]. We have developed and implemented an scikit-learn dependent library for free implementation of the method.
+*CRFE*  is the recursive adaptation of the SMFS feature selection method [1],[2]. We have developed and implemented an scikit-learn dependent library for free implementation of the method.
 
 
 ## Requirements
@@ -96,4 +96,15 @@ print(SVM_fit_2.score(X_test, Y_test))
 
 
 ## References 
+
+[1] T. Bellotti, Z. Luo, and A. Gammerman, “Strangeness Minimisation
+Feature Selection with Confidence Machines,” in Intelligent Data Engineering
+and Automated Learning IDEAL 2006, ser. Lecture Notes in
+Computer Science, E. Corchado, H. Yin, V. Botti, and C. Fyfe, Eds.
+Berlin, Heidelberg: Springer, 2006, pp. 978–985.
+
+[2] V. Balasubramanian, S.-S. Ho, and V. Vovk, Conformal Prediction
+for Reliable Machine Learning: Theory, Adaptations and Applications,
+1st ed. San Francisco, CA, USA: Morgan Kaufmann Publishers Inc.,
+2014.
 
