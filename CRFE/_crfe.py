@@ -99,23 +99,23 @@ class CRFE(BaseEstimator):
 
         else:
 
-            beta_sum =  np.sum(beta)/len(beta)
+            beta_sum =  np.sum(beta)/len(beta)   # mean of betas
 
             if len(self.stopping_list) > self.stopping_boost:
-                del self.stopping_list[0]
+                del self.stopping_list[0]                     # delete the older computed element of the list if is larger than the pre-established set size
 
             self.stopping_list.append(beta_sum)
 
             if starting_flag == True:
-                stopping_list_ = [ beta_sum for _ in range(2)]
-                x_der_ = [ i for i in range(len(stopping_list_))]
+                stopping_list_ = [ beta_sum for _ in range(2)]      # initialize the list
+                x_der_ = [ i for i in range(len(stopping_list_))]   # list of "points" to compute the numeric derivative
                    
-                self.stopping_list_grad_2.append(np.gradient(np.gradient(stopping_list_, x_der_), x_der_).tolist()[-1])
+                self.stopping_list_grad_2.append(np.gradient(np.gradient(stopping_list_, x_der_), x_der_).tolist()[-1])  # Second derivative
 
                 starting_flag = False
 
             else:
-                x_der = [ i for i in range(len(self.stopping_list))]
+                x_der = [ i for i in range(len(self.stopping_list))]      # list of "points" to compute the numeric derivative
                     
                 second_deriv = np.gradient(np.gradient(self.stopping_list, x_der), x_der).tolist()
 
@@ -129,24 +129,24 @@ class CRFE(BaseEstimator):
                     self.stopping_list_grad_2[i] = second_deriv[i]
 
             n_sigmas = 5
-            self.std_dev.append(np.std(self.stopping_list_grad_2[-len(self.stopping_list):]))
+            self.std_dev.append(np.std(self.stopping_list_grad_2[-len(self.stopping_list):]))    # compute the std deviation only of the "self.stopping_boost" latest elements
 
             if len(self.stopping_list_grad_2) >  round(self.epsilon/2):
                     
-                if self.stopping_list_grad_2[-2] < -n_sigmas*(self.std_dev[-2]):
+                if self.stopping_list_grad_2[-2] < -n_sigmas*(self.std_dev[-2]):  
 
                     return True
 
         return False
-
+    
 
     def recursive_elimination( self, X_tr, Y_tr, X_cal, Y_cal):
 
-        list_of_index = np.arange(len(X_tr[0])).tolist() # Empieza en 0   # Array must be a list
-        n = len(list_of_index)                          # counter of features
-        self.Lambda_p = (1-self.Lambda) / (len(self.classes_)-1)
+        list_of_index = np.arange(len(X_tr[0])).tolist()          # Empieza en 0   # Array must be a list
+        n = len(list_of_index)                                    # Number of features
+        self.Lambda_p = (1-self.Lambda) / (len(self.classes_)-1)  # Theoretical parameter
 
-        self.stopping_boost = int(n*self.epsilon)
+        self.stopping_boost = int(n*self.epsilon)                 # List needed for the beta-based-stopping criteria
         self.stopping_list = []
         self.starting_flag = True
         self.stopping_list_grad_2 = []
