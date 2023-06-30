@@ -15,6 +15,7 @@ from sklearn.svm import SVR, LinearSVC
 from sklearn.utils.validation import check_X_y, check_array, check_is_fitted
 from sklearn.utils._param_validation import HasMethods, Interval, Real
 from sklearn.base import BaseEstimator, clone
+from sklearn.multiclass import OneVsRestClassifier
 
 from CRFE._crfe_utils import to_list, binary_change
 
