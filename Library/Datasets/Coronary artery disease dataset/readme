@@ -1,0 +1,2 @@
+Pre proccessed files: Atributes.npy are the attributes of the datset in a numpy file
+                      targets.npy are the variable to predict.

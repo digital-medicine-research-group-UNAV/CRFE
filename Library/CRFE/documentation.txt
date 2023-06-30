@@ -1,0 +1,38 @@
+
+
+### CONFORMAL RECURSIVE FEATURE ELIMINATION
+
+
+Authors: Marcos López de Castro, Alberto García Galindo, Rubén armañanzas
+
+
+Affiliation : DATAI - Institute for Data Science and Artifcial Intelligence
+              University of Navarra, Pamplona, Spain.
+
+
+
+This library is compatible with scikit-learn API. Version = 1.2.2 .  
+
+
+
+--->  Import the numerical method by this way:
+
+    from CRFE._crfe import CRFE
+
+---> Build the object CRFE with the next parameters.
+
+crfe = CRFE(estimator , features_to_select , Lambda , stopping_activayed, epsilon )
+
+## Parameters
+
+    estimator : Supervised learning estimator. Must have a fit method. Must provide "coef_" info.
+    features_to_select : The number of features to select. Integer. Default = 1. Is the absolute number of features to select. 
+    Lambda :  Multi-class parameter. Default = 0.5. Float between 0 and 1. Controls the weight of the "one" class in "OneVSRest" strategy.
+    stopping_activated :  If the beta-based stopping criteria is considered.
+    epsilon : Beta-based stoping criteria. Float. Ranges from 0 to 1. 
+
+## atributes
+
+    idx_features_ : List with the index of the selected features.
+    estimator_ : The fitted estimator used to select features.
+    classes_ : Classes labels available when estimator is a classifier.
