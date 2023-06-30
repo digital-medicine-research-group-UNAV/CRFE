@@ -157,7 +157,7 @@ class CRFE(BaseEstimator):
         X_cal = np.insert(X_cal , 0, list_of_index, 0)
         
 
-        ### recursive elimination loop dicotomic and multiclass  ###
+        ### recursive elimination loop  ###
 
         list_of_deleted_indexes = []
         while n != self.features_to_select:
@@ -167,11 +167,26 @@ class CRFE(BaseEstimator):
             X_cal = np.delete(X_cal , 0, 0)
 
 
-            self.estimator.fit(X_tr, Y_tr)
+            ## fit the classifier
+            
+            if len(self.classes_) == 2:
 
-            w = self.estimator.coef_
-            bias = self.estimator.intercept_
-            #print(self.estimator.classes_)
+                self.estimator.fit(X_tr, Y_tr)
+                w = self.estimator.coef_
+                bias = self.estimator.intercept_
+
+            else: 
+                if isinstance(self.estimator, OneVsRestClassifier) == True:
+                    self.estimator.fit(X_tr, Y_tr)
+
+                else:
+                    self.estimator = OneVsRestClassifier(self.estimator)
+                    self.estimator.fit(X_tr, Y_tr)
+
+                w = [self.estimator.estimators_[i].coef_.tolist()[0] for i in range(len(self.estimator.estimators_))]
+                bias = [self.estimator.estimators_[i].intercept_.tolist()[0] for i in range(len(self.estimator.estimators_))]
+
+            ## compute betas 
             
             if len(self.classes_) == 2:
                 
