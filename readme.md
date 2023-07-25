@@ -2,7 +2,7 @@
 
 # CRFE - Conformal Recursive Feature Selection
 
-*CRFE*  is the first feature selection method based on a recursive backward elimintation policy that takes advantage from the Conformal Prediction framework [1]. CRFE´s objective is minimizing the non-conformity of the features, i.e the same as SMFS [2], but instead of creating a feature ranking, we apply the RFE policy. Multiclass classficcation is available . We have developed and implemented an scikit-learn dependent open source library that implements CRFE.
+*CRFE*  is the first feature selection method based on a recursive backward elimintation policy that takes advantage from the Conformal Prediction framework [1]. CRFE´s objective is minimizing the non-conformity of the features, i.e., the same as SMFS do [2], but instead of creating a feature ranking, we apply the RFE policy. Multiclass classficcation is available. An automatic stopping criteria is available. We have developed and implemented an scikit-learn dependent open source library that implements CRFE.
 
 
 ## Requirements
@@ -17,6 +17,7 @@ Scikit-learnt 1.2.2+
 
 Let start with a basic example.
 
+After having downloaded the folder "CRFE" into the directory "Library," we proceed to create a new Python script within the subfolder named "Examples.
 Firstly, we will import the required modules.
 
 ```python
@@ -34,7 +35,7 @@ from CRFE._crfe import CRFE
 
 ```
 
-Let´s built a binary dataset test.
+Let´s built a test.
 
 ```python
 
@@ -56,7 +57,7 @@ X_tr , X_cal , Y_tr, Y_cal = train_test_split( X_tr, Y_tr, test_size=0.5, strati
 
 ```
 
-CRFE libray is scikit-learn API dependent. It follows the same scheme then the RFE method in scikit-learn.
+CRFE libray is scikit-learn API dependent. It follows the same scheme than the RFE method in scikit-learn.
 
 
 ```python
@@ -79,7 +80,7 @@ print("Selected features: ", crfe.idx_features_)
 X_tr_ = list(np.array(X_tr)[:, crfe.idx_features_]) 
 X_test_ = list(np.array(X_test)[:, crfe.idx_features_]) 
 ```
-The fitted Estimator imported. We compare the results against the dataset with all the features.
+The fitted Estimator is imported, but we can fit any other estimator once the features selected are known. We compare the results against the dataset with all the features. 
 
 ```python
 SVM_fit = crfe.estimator_.fit(X_tr_, Y_tr)
@@ -94,6 +95,7 @@ SVM_fit_2 = SVM_est_2.fit(X_tr, Y_tr)
 print(SVM_fit_2.score(X_test, Y_test))
 ```
 
+At this point, you can use your favourite library for uncertainty quantification such as MAPIE [3].
 
 ## References 
 
@@ -107,6 +109,10 @@ Feature Selection with Confidence Machines,” in Intelligent Data Engineering
 and Automated Learning IDEAL 2006, ser. Lecture Notes in
 Computer Science, E. Corchado, H. Yin, V. Botti, and C. Fyfe, Eds.
 Berlin, Heidelberg: Springer, 2006, pp. 978–985.
+
+[3] V. Taquet, V. Blot, T. Morzadec, L. Lacombe, and N. Brunel,
+“Mapie: an open-source library for distribution-free uncertainty
+quantification,” arXiv preprint arXiv:2207.12274, 2022
 
 
 
