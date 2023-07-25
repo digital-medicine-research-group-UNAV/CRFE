@@ -2,7 +2,7 @@
 
 # CRFE - Conformal Recursive Feature Selection
 
-*CRFE*  is the first feature selection method based on a recursive backward elimintation policy that takes advantage from the Conformal Prediction framework [1]. CRFE´s objective is minimizing the non-conformity of the features, i.e the same as SMFS [2], but instead of creating a feature ranking, we apply the RFE policy. Multiclass classficcation is available . We have developed and implemented an scikit-learn dependent library for the free implementation of the proposed method.
+*CRFE*  is the first feature selection method based on a recursive backward elimintation policy that takes advantage from the Conformal Prediction framework [1]. CRFE´s objective is minimizing the non-conformity of the features, i.e the same as SMFS [2], but instead of creating a feature ranking, we apply the RFE policy. Multiclass classficcation is available . We have developed and implemented an scikit-learn dependent open source library that implements CRFE.
 
 
 ## Requirements
