@@ -15,9 +15,10 @@ Scikit-learnt 1.2.2+
 
 ## Quickstart
 
-Let start with a basic example.
+Let start with a basic example. This example is coded in *Examples/example_5.py*. See *Examples* folder for additional examples.
 
-After having downloaded the folder "CRFE" into the directory "Library," we proceed to create a new Python script within the subfolder named "Examples.
+After having downloaded the folder *CRFE* into the directory *Library*, we proceed to create a new Python script within the subfolder named *Examples*.
+
 Firstly, we will import the required modules.
 
 ```python
@@ -35,7 +36,7 @@ from CRFE._crfe import CRFE
 
 ```
 
-Let´s built a test.
+Let´s built a test. 
 
 ```python
 
@@ -70,17 +71,18 @@ crfe = CRFE(estimator , features_to_select = 3)
 crfe.fit(X_tr, Y_tr, X_cal , Y_cal)
 
 ```
-Let´s call the atribute `idx_features_` to get the list with the features selected.  
+Let´s call the atribute `idx_features_` to get the list with the features selected. The atribute `idx_betas_` returns the list of the betas associated to the selected features.  
 
 ```python
 print("Selected features: ", crfe.idx_features_)
+print("Betas: " ,crfe.idx_betas_)
 
 ## Delete the dismissed features
 
 X_tr_ = list(np.array(X_tr)[:, crfe.idx_features_]) 
 X_test_ = list(np.array(X_test)[:, crfe.idx_features_]) 
 ```
-The fitted Estimator is imported, but we can fit any other estimator once the features selected are known. We compare the results against the dataset with all the features. 
+The used Estimator is imported (not fitted, only the classifier). However, we can fit any other estimator once the features selected are known. We compare the results against the dataset with all the features. Moreover, at this point you can use your favourite uncertainty quantification library such as MAPIE [3].
 
 ```python
 SVM_fit = crfe.estimator_.fit(X_tr_, Y_tr)
@@ -95,7 +97,6 @@ SVM_fit_2 = SVM_est_2.fit(X_tr, Y_tr)
 print(SVM_fit_2.score(X_test, Y_test))
 ```
 
-At this point, you can use your favourite library for uncertainty quantification such as MAPIE [3].
 
 ## References 
 
