@@ -34,5 +34,6 @@ crfe = CRFE(estimator , features_to_select , Lambda , stopping_activayed, epsilo
 ## atributes
 
     idx_features_ : List with the index of the selected features.
+    idx_betas_ : List with betas linked to each feature when the recursive process is over.
     estimator_ : The fitted estimator used to select features.
     classes_ : Classes labels available when estimator is a classifier.
