@@ -58,6 +58,9 @@ class CRFE(BaseEstimator):
 
     
     idx_features_ : List with the index of the selected features.
+    
+
+    idx_betas_ : List with betas linked to each feature when the recursive process is over.
 
 
     estimator_ : The fitted estimator used to select features.
@@ -88,6 +91,7 @@ class CRFE(BaseEstimator):
         self.estimator = estimator
         self.features_to_select = features_to_select
         self.features = []
+        self.betas = []
         self.Lambda = Lambda
         self.stopping_activated = stopping_activated
         self.epsilon = epsilon 
@@ -244,7 +248,9 @@ class CRFE(BaseEstimator):
             print("Remaining indices: ", n )
 
             self.features =  X_tr[0].astype(int)
-
+            beta.pop(deleted_index )
+            self.betas = beta
+            
         #if self.stopping_activated == False:
             #self.features = X_tr[0].astype(int)   #las que se quedan
         
@@ -299,6 +305,7 @@ class CRFE(BaseEstimator):
 
         # Set final attributes  
         self.idx_features_ = self.features
+        self.idx_betas_ = self.betas
         self.estimator_ = clone(self.estimator)
        
         return self 
