@@ -63,6 +63,15 @@ crfe = CRFE(estimator , features_to_select = 3)
 crfe.fit(X_tr, Y_tr, X_cal , Y_cal)
 
 print("Features selected: " , crfe.idx_features_)
+print("Betas: " ,crfe.idx_betas_)
+
+###### We can import the estimator(not fitted yet) or code one by ourself ####
+
+estimator_fit = crfe.estimator_.fit(X_tr_, Y_tr)
+
+X_test_, Y_test = #define test samples
+
+print(estimator_fit.score(X_test_, Y_test))
 
 
 
