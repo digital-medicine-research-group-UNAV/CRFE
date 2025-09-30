@@ -1,101 +1,84 @@
-
-
 # CRFE - Conformal Recursive Feature Selection
 
 *CRFE*  is the first feature selection method based on a recursive backward elimintation policy that takes advantage from the Conformal Prediction framework [1]. CRFE´s objective is minimizing the non-conformity of the features, i.e., the same as SMFS do [2], but instead of creating a feature ranking, we apply the RFE policy. Multiclass classficcation is available. An automatic stopping criteria is available. We have developed and implemented an scikit-learn dependent open source library that implements CRFE [4].
-
-
+ 
 ## Requirements
 
-Python 3.7 +
-
-Scikit-learnt 1.2.2+
-
-
+- Python 3.9+
+- scikit-learn 1.2.2+
+- numpy
 
 ## Quickstart
 
-Let start with a basic example. This example is coded in *Examples/example_5.py*. See *Examples* folder for additional examples.
+Let start with a basic example. This example is coded in *Examples/example_2.py*.
 
-After having downloaded the folder *CRFE* into the directory *Library*, we proceed to create a new Python script within the subfolder named *Examples*.
 
-Firstly, we will import the required modules.
 
 ```python
 import sys
 import numpy as np
 
-from sklearn.datasets import load_iris, make_classification
+from sklearn.datasets import load_iris
 from sklearn.svm import LinearSVC
 from sklearn.utils import check_random_state
 from sklearn.model_selection import train_test_split
 
-#from CRFE._crfe import CRFE   
-sys.path.insert(0, "../") 
-from CRFE._crfe import CRFE 
+sys.path.insert(0, "../")
+from CRFE._crfe import CRFE
+from CRFE.stopping import ParamParada
 
-```
-
-Let´s built a test. 
-
-```python
-
-### Load the dataset  ## 
- 
-generator = check_random_state(0)
+rng = check_random_state(0)
 iris = load_iris()
 
-# Add random features
-
-X = np.c_[iris.data, generator.normal(size=(len(iris.data), 6))]
+# Append irrelevant noise features under a fixed seed
+X = np.c_[iris.data, rng.normal(size=(len(iris.data), 6))]
 Y = iris.target
 
-# Split the dataset in training and calibration 
+X_tr, X_test, Y_tr, Y_test = train_test_split(X, Y, test_size=0.2, stratify=Y)
+X_tr, X_cal, Y_tr, Y_cal = train_test_split(X_tr, Y_tr, test_size=0.5, stratify=Y_tr)
 
-X_tr , X_test , Y_tr, Y_test = train_test_split( X, Y, test_size=0.2, stratify=Y)
-X_tr , X_cal , Y_tr, Y_cal = train_test_split( X_tr, Y_tr, test_size=0.5, stratify=Y_tr)
+estimator = LinearSVC(tol=1e-4, loss="squared_hinge", max_iter=300000)
+crfe = CRFE(
+    estimator,
+    features_to_select=3,
+    stopping_activated=True,
+    stopping_params=ParamParada(alpha=0.05, eps=0.02, eta=0.1, paciencia=20),
+)
+crfe.fit(X_tr, Y_tr, X_cal, Y_cal)
 
-
+print("Selected features:", crfe.idx_features_)
+print("Stopping reason:", crfe.stopping_reason_)
 ```
 
-CRFE libray is scikit-learn API dependent. It follows the same scheme than the RFE method in scikit-learn.
-
+The selected features can be reused with any estimator. The cloned estimator is available through `crfe.estimator_`.
 
 ```python
+X_tr_sel = X_tr[:, crfe.idx_features_]
+X_test_sel = X_test[:, crfe.idx_features_]
 
-estimator = LinearSVC(tol = 1.e-4, 
-                      loss='squared_hinge',
-                      max_iter= 300000)
+svm_selected = crfe.estimator_.fit(X_tr_sel, Y_tr)
+print("Score with selected features:", svm_selected.score(X_test_sel, Y_test))
+```
 
-crfe = CRFE(estimator , features_to_select = 3)
-crfe.fit(X_tr, Y_tr, X_cal , Y_cal)
+## Folder layout
 
 ```
-Let´s call the atribute `idx_features_` to get the list with the features selected. The atribute `idx_betas_` returns the list of the betas associated to the selected features.  
-
-```python
-print("Selected features: ", crfe.idx_features_)
-print("Betas: " ,crfe.idx_betas_)
-
-## Delete the dismissed features
-
-X_tr_ = list(np.array(X_tr)[:, crfe.idx_features_]) 
-X_test_ = list(np.array(X_test)[:, crfe.idx_features_]) 
+CRFE_library_pro/
+├── Library/
+│   ├── CRFE/
+│   │   ├── _crfe.py
+│   │   ├── _crfe_utils.py
+│   │   ├── documentation.txt
+│   │   └── stopping.py
+│   └── Examples/
+│       ├── example_1.py
+│       └── example_2.py
+├── LICENSE
+└── readme.md
 ```
-The used Estimator is imported (not fitted, only the classifier). However, we can fit any other estimator once the features selected are known. We compare the results against the dataset with all the features. Moreover, at this point you can use your favourite uncertainty quantification library such as MAPIE [3].
-
-```python
-SVM_fit = crfe.estimator_.fit(X_tr_, Y_tr)
-print(SVM_fit.score(X_test_, Y_test))
 
 
-SVM_est_2 = LinearSVC(tol = 1.e-4, 
-                      loss='squared_hinge',
-                      max_iter= 300000)
 
-SVM_fit_2 = SVM_est_2.fit(X_tr, Y_tr)
-print(SVM_fit_2.score(X_test, Y_test))
-```
 
 
 ## References 
@@ -117,5 +100,3 @@ quantification,” arXiv:2207.12274, 2022
 
 [4] M. López-De-Castro, A. García-Galindo, and R. Armañanzas, 
 "Conformal Recursive Feature Elimination", arXiv:2405.19429, 2024
-
-
