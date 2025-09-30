@@ -94,7 +94,5 @@ and Automated Learning IDEAL 2006, ser. Lecture Notes in
 Computer Science, E. Corchado, H. Yin, V. Botti, and C. Fyfe, Eds.
 Berlin, Heidelberg: Springer, pp. 978–985, 2006
 
-[3] V. Taquet, V. Blot, T. Morzadec, L. Lacombe, and N. Brunel,
-“Mapie: an open-source library for distribution-free uncertainty
-quantification,” arXiv:2207.12274, 2022
+
 
