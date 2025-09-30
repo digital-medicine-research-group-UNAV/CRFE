@@ -1,0 +1,30 @@
+### CONFORMAL RECURSIVE FEATURE ELIMINATION 
+
+Authors: Marcos López de Castro, Alberto García Galindo, Rubén Armañanzas
+Affiliation: DATAI - Institute for Data Science and Artificial Intelligence, University of Navarra, Pamplona, Spain.
+
+This library mirrors the scikit-learn API (tested with scikit-learn 1.2.2+).
+
+Import the method:
+    from CRFE._crfe import CRFE
+
+Instantiate the selector:
+    crfe = CRFE(estimator, features_to_select=3, Lambda=0.5,
+                stopping_activated=True, stopping_params=ParamParada())
+
+Parameters
+---------
+- estimator: Supervised estimator with `fit` and `coef_` (e.g., `LinearSVC`).
+- features_to_select: Absolute number of features to keep (default=1).
+- Lambda: Multiclass parameter in [0, 1] controlling the One-vs-Rest balance (default=0.5).
+- stopping_activated: Enable the new proximity-based stopping rule (default=False).
+- epsilon: Legacy beta-based setting kept for backward compatibility.
+- stopping_params: Optional `ParamParada` instance to tune the stopping rule (alpha, eps, eta, paciencia).
+
+Attributes
+---------
+- idx_features_: Selected feature indices after elimination.
+- idx_betas_: Beta weights associated with the selected features.
+- estimator_: Estimator cloned from the input estimator (ready to refit on the selected features).
+- classes_: Encoded class labels used during fitting.
+- stopping_reason_: Text label describing why the stopping rule triggered (None if it ran to completion).
