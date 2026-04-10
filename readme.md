@@ -1,6 +1,6 @@
 # CRFE - Conformal Recursive Feature Selection
 
-*CRFE*  is the first feature selection method based on a recursive backward elimintation policy that takes advantage from the Conformal Prediction framework [1]. CRFE´s objective is minimizing the non-conformity of the features [2] using a recursive elimination policy. We also present an automatic stopping criteria for recursive methods. 
+*CRFE* is a feature selection method based on recursive backward elimination, grounded in the Conformal Prediction framework [1]. The method minimizes feature non-conformity [2] through an iterative elimination policy and incorporates an automatic stopping criterion for recursive procedures.
  
 ## Requirements
 
@@ -10,80 +10,42 @@
 
 ## Quickstart
 
-You can install this repository locally via pip using
-
-
-```bash
-pip install .
-```
-
-For editable/development mode:
+Install from PyPI with:
 
 ```bash
-pip install -e .
+pip install CRFE
 ```
 
-Using pixi (see `pixi.toml` in this repository):
+Install from TestPyPI with:
+
+```bash
+pip install --index-url https://test.pypi.org/simple/ --extra-index-url https://pypi.org/simple CRFE
+```
+
+Use with pixi (installs `CRFE` from PyPI via `pixi.toml`):
 
 ```bash
 pixi install
-pixi run install-local
+pixi run check-crfe
 ```
 
+## Examples
 
+For complete usage scripts, see:
 
+- `Library/Examples/example_1.py` (multiclass synthetic benchmark with noisy variables)
+- `Library/Examples/example_2.py` (Iris dataset with synthetic noise and downstream evaluation)
 
-Let start with a basic example. This example is coded in *Examples/example_2.py*.
-
-
+Both examples use the public package interface:
 
 ```python
-import numpy as np
-
-from sklearn.datasets import load_iris
-from sklearn.svm import LinearSVC
-from sklearn.utils import check_random_state
-from sklearn.model_selection import train_test_split
-
 from CRFE import CRFE, ParamParada
-
-rng = check_random_state(0)
-iris = load_iris()
-
-# Append irrelevant noise features under a fixed seed
-X = np.c_[iris.data, rng.normal(size=(len(iris.data), 6))]
-Y = iris.target
-
-X_tr, X_test, Y_tr, Y_test = train_test_split(X, Y, test_size=0.2, stratify=Y)
-X_tr, X_cal, Y_tr, Y_cal = train_test_split(X_tr, Y_tr, test_size=0.5, stratify=Y_tr)
-
-estimator = LinearSVC(tol=1e-4, loss="squared_hinge", max_iter=300000)
-crfe = CRFE(
-    estimator,
-    features_to_select=3,
-    stopping_activated=True,
-    stopping_params=ParamParada(alpha=0.05, eps=0.02, eta=0.1, paciencia=20),
-)
-crfe.fit(X_tr, Y_tr, X_cal, Y_cal)
-
-print("Selected features:", crfe.idx_features_)
-print("Stopping reason:", crfe.stopping_reason_)
-```
-
-The selected features can be reused with any estimator. The cloned estimator is available through `crfe.estimator_`.
-
-```python
-X_tr_sel = X_tr[:, crfe.idx_features_]
-X_test_sel = X_test[:, crfe.idx_features_]
-
-svm_selected = crfe.estimator_.fit(X_tr_sel, Y_tr)
-print("Score with selected features:", svm_selected.score(X_test_sel, Y_test))
 ```
 
 ## Folder layout
 
 ```
-CRFE_library_pro/
+CRFE/
 ├── Library/
 │   ├── CRFE/
 │   │   ├── _crfe.py
@@ -96,10 +58,6 @@ CRFE_library_pro/
 ├── LICENSE
 └── readme.md
 ```
-
-
-
-
 
 ## References 
 

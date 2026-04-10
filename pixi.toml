@@ -4,9 +4,9 @@ platforms = ["linux-64"]
 
 [dependencies]
 python = ">=3.9,<3.14"
-numpy = "*"
-scikit-learn = ">=1.2.2"
-pip = "*"
+
+[pypi-dependencies]
+crfe = ">=0.1.0"
 
 [tasks]
-install-local = "python -m pip install -e . --no-deps --no-build-isolation"
+check-crfe = "python -c \"from CRFE import CRFE, ParamParada, StoppingCriteria; print('CRFE OK')\""
