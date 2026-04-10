@@ -129,13 +129,20 @@ class CRFE(BaseEstimator):
         else:
             self.betas = []
 
-    def fit(self, X_tr, Y_tr, X_cal, Y_cal):
+    def fit(self, X_tr, Y_tr, X_cal=None, Y_cal=None):
         self._validate_params()
 
         X_tr = np.asarray(X_tr, dtype=float)
         Y_tr = np.asarray(Y_tr)
-        X_cal = np.asarray(X_cal, dtype=float)
-        Y_cal = np.asarray(Y_cal)
+
+        if (X_cal is None) != (Y_cal is None):
+            raise ValueError("X_cal and Y_cal must both be provided or both be None")
+        if X_cal is None and Y_cal is None:
+            X_cal = X_tr
+            Y_cal = Y_tr
+        else:
+            X_cal = np.asarray(X_cal, dtype=float)
+            Y_cal = np.asarray(Y_cal)
 
         if X_tr.shape[1] != X_cal.shape[1]:
             raise ValueError("X training and X calibration must have the same number of features")
@@ -145,12 +152,15 @@ class CRFE(BaseEstimator):
         if not np.array_equal(np.sort(train_classes), np.sort(cal_classes)):
             raise ValueError("All classes in training must be present in calibration")
 
-        self.classes_, Y_tr = np.unique(Y_tr, return_inverse=True)
+        self.classes_ = np.unique(Y_tr)
+        class_to_idx = {cls: idx for idx, cls in enumerate(self.classes_)}
+        Y_tr_encoded = np.array([class_to_idx[y] for y in Y_tr])
+        Y_cal_encoded = np.array([class_to_idx[y] for y in Y_cal])
 
         if len(self.classes_) == 2:
-            Y_tr, Y_cal, self.classes_ = binary_change(Y_tr, Y_cal)
+            Y_tr_encoded, Y_cal_encoded, self.classes_ = binary_change(Y_tr_encoded, Y_cal_encoded)
 
-        self.recursive_elimination(X_tr, Y_tr, X_cal, Y_cal)
+        self.recursive_elimination(X_tr, Y_tr_encoded, X_cal, Y_cal_encoded)
 
         self.idx_features_ = self.features
         self.idx_betas_ = self.betas

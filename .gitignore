@@ -1,0 +1,49 @@
+# Python bytecode and caches
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+
+# Test and tooling caches
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Build artifacts
+build/
+dist/
+*.whl
+*.tar.gz
+*.egg-info/
+.eggs/
+pip-wheel-metadata/
+
+# Coverage
+.coverage
+.coverage.*
+htmlcov/
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Python tooling environments/caches
+.tox/
+.nox/
+.hypothesis/
+
+# Pixi local environment (keep pixi.lock tracked)
+.pixi/
+!pixi.lock
+
+# Local environment/config files
+.env
+.env.*
+.python-version
+
+# Notebook and editor artifacts
+.ipynb_checkpoints/
+.DS_Store
+.vscode/
+.idea/

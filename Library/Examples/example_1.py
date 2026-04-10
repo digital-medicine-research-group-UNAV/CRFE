@@ -1,16 +1,10 @@
-import sys
-from pathlib import Path
-
 import numpy as np
 from sklearn.datasets import make_classification
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.svm import LinearSVC
 
-# Allow importing the local CRFE package from the Library folder
-sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
-from CRFE._crfe import CRFE
-from CRFE.stopping import ParamParada
+from CRFE import CRFE, ParamParada
 
 # Multiclass synthetic example with noisy features
 X, Y = make_classification(

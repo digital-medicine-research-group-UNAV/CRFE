@@ -1,15 +1,10 @@
-import sys
-from pathlib import Path
-
 import numpy as np
 from sklearn.datasets import load_iris
 from sklearn.model_selection import train_test_split
 from sklearn.svm import LinearSVC
 from sklearn.utils import check_random_state
 
-sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
-from CRFE._crfe import CRFE
-from CRFE.stopping import ParamParada
+from CRFE import CRFE, ParamParada
 
 rng = check_random_state(0)
 iris = load_iris()

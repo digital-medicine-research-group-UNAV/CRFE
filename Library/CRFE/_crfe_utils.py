@@ -16,22 +16,14 @@ def to_list(array_like):
 
 def binary_change(y_tr, y_cal):
     """Convert labels from {0, 1} to {-1, 1} keeping class names."""
-    y_tr = np.asarray(y_tr, dtype=int)
-    y_cal = np.asarray(y_cal, dtype=int)
+    y_tr = np.asarray(y_tr)
+    y_cal = np.asarray(y_cal)
 
     y_tr = np.where(y_tr == 0, -1, y_tr)
     y_cal = np.where(y_cal == 0, -1, y_cal)
 
-    class_names = np.unique(y_tr)
-    mapping = {value: idx for idx, value in enumerate(class_names)}
-
-    y_tr_encoded = np.array([mapping[val] for val in y_tr], dtype=int)
-    try:
-        y_cal_encoded = np.array([mapping[val] for val in y_cal], dtype=int)
-    except KeyError as exc:
-        raise ValueError("Calibration labels contain unseen classes.") from exc
-
-    return y_tr_encoded, y_cal_encoded, class_names
+    class_names, y_tr = np.unique(y_tr, return_inverse=True)
+    return y_tr, y_cal, class_names
 
 
 def compute_beta_binary(weights, y_cal, X_cal):

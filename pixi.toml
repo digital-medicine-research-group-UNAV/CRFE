@@ -1,0 +1,12 @@
+[workspace]
+channels = ["conda-forge"]
+platforms = ["linux-64"]
+
+[dependencies]
+python = ">=3.9,<3.14"
+numpy = "*"
+scikit-learn = ">=1.2.2"
+pip = "*"
+
+[tasks]
+install-local = "python -m pip install -e . --no-deps --no-build-isolation"

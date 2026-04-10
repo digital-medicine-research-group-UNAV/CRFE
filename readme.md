@@ -10,13 +10,25 @@
 
 ## Quickstart
 
-You can install our method via pip using
+You can install this repository locally via pip using
 
 
 ```bash
-pip install CRFE
+pip install .
 ```
-or via pixi with our toml as:
+
+For editable/development mode:
+
+```bash
+pip install -e .
+```
+
+Using pixi (see `pixi.toml` in this repository):
+
+```bash
+pixi install
+pixi run install-local
+```
 
 
 
@@ -26,7 +38,6 @@ Let start with a basic example. This example is coded in *Examples/example_2.py*
 
 
 ```python
-import sys
 import numpy as np
 
 from sklearn.datasets import load_iris
@@ -34,9 +45,7 @@ from sklearn.svm import LinearSVC
 from sklearn.utils import check_random_state
 from sklearn.model_selection import train_test_split
 
-sys.path.insert(0, "../")
-from CRFE._crfe import CRFE
-from CRFE.stopping import ParamParada
+from CRFE import CRFE, ParamParada
 
 rng = check_random_state(0)
 iris = load_iris()
@@ -104,6 +113,3 @@ Feature Selection with Confidence Machines,” in Intelligent Data Engineering
 and Automated Learning IDEAL 2006, ser. Lecture Notes in
 Computer Science, E. Corchado, H. Yin, V. Botti, and C. Fyfe, Eds.
 Berlin, Heidelberg: Springer, pp. 978–985, 2006
-
-
-
