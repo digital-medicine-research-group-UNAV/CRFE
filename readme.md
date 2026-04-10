@@ -10,6 +10,17 @@
 
 ## Quickstart
 
+You can install our method via pip using
+
+
+```bash
+pip install CRFE
+```
+or via pixi with our toml as:
+
+
+
+
 Let start with a basic example. This example is coded in *Examples/example_2.py*.
 
 
