@@ -16,13 +16,7 @@ Install from PyPI with:
 pip install CRFE
 ```
 
-Install from TestPyPI with:
-
-```bash
-pip install --index-url https://test.pypi.org/simple/ --extra-index-url https://pypi.org/simple CRFE
-```
-
-Use with pixi (installs `CRFE` from PyPI via `pixi.toml`):
+or use it with pixi (installs `CRFE` from PyPI via the provided `pixi.toml`):
 
 ```bash
 pixi install
