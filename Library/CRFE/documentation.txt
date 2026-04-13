@@ -19,7 +19,7 @@ Parameters
 - Lambda: Multiclass parameter in [0, 1] controlling the One-vs-Rest balance (default=0.5).
 - stopping_activated: Enable the new proximity-based stopping rule (default=False).
 - epsilon: Legacy beta-based setting kept for backward compatibility.
-- stopping_params: Optional `ParamParada` instance to tune the stopping rule (alpha, eps, eta, paciencia).
+- stopping_params: Optional `ParamParada` instance to tune the stopping rule (alpha, xi, eta, paciencia).
 
 Attributes
 ---------

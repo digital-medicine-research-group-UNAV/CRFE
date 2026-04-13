@@ -8,7 +8,7 @@ from functools import lru_cache
 class ParamParada:
     """Parámetros para el criterio de parada del CRFE."""
     alpha: float = 0.05        # cuantil para robustez
-    eps: float = 0.02          # mejora relativa mínima (2%) para "mejora material"
+    xi: float = 0.05           # control de cuantiles en matriz de proximidad
     eta: float = 0.10          # retroceso absoluto que dispara parada inmediata
     paciencia: int = 580         # iteraciones sin mejora material antes de chequear dominancia
     usar_dominancia: bool = False  # si usar dominancia de Pareto en parada
@@ -79,7 +79,7 @@ class StoppingCriteria:
         self.historial = []
 
     @staticmethod
-    def compute_proximity_matrix( X, y):
+    def compute_proximity_matrix( X, y, xi: float = 0.05):
         """
         Computes proximity matrix (n_clases x n_clases) where:
         - [i,j] = distancia mínima del centroide de clase i a observaciones de clase j (i!=j)
@@ -97,6 +97,9 @@ class StoppingCriteria:
         
         unique_classes, y_indices = np.unique(y, return_inverse=True)
         n_clases = len(unique_classes)
+
+        q_inter = float(np.clip(xi, 0.0, 1.0))
+        q_intra = float(np.clip(1.0 - q_inter, 0.0, 1.0))
         
         if n_clases < 2:
             return np.array([[1.0]])
@@ -124,11 +127,11 @@ class StoppingCriteria:
                 dists_clase = distancias_todas[mask_clase]
                 
                 if target_cls_idx == cls_idx:
-                    # Misma clase: 5% mas lejano (dispersión intra-clase)
-                    D[cls_idx, target_cls_idx] = np.quantile(dists_clase, 0.95) 
+                    # Misma clase: cuantil alto controlado por xi (1 - xi)
+                    D[cls_idx, target_cls_idx] = np.quantile(dists_clase, q_intra)
                 else:
-                    # Clase diferente: 5% mas cercano (separación inter-clase)
-                    D[cls_idx, target_cls_idx] = np.quantile(dists_clase, 0.05)
+                    # Clase diferente: cuantil bajo controlado por xi
+                    D[cls_idx, target_cls_idx] = np.quantile(dists_clase, q_inter)
 
         return D
 
@@ -196,7 +199,7 @@ class StoppingCriteria:
             tuple: (debe_parar, mejor_idx, motivo)
         """
         self.t += 1
-        D = self.compute_proximity_matrix(X, y)
+        D = self.compute_proximity_matrix(X, y, xi=float(self.params.xi))
         m = self.matrix_evaluation(D)
 
         #print(D)
@@ -217,7 +220,8 @@ class StoppingCriteria:
             return False, self.mejor_idx, None
 
         # Umbralización precomputada
-        umbral_mejora = self.mejor_val * (1.0 + 0.005) 
+        eps_fijo = 0.005
+        umbral_mejora = self.mejor_val * (1.0 + eps_fijo) 
 
         eta = 0.12 #= self._auto_eta_from_history(W=5, alpha=self.params.alpha, eps_eta=1e-3)
         umbral_retroceso = self.mejor_val - eta

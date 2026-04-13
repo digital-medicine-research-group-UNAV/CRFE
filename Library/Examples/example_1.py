@@ -36,7 +36,7 @@ crfe = CRFE(
     estimator,
     features_to_select=1,
     stopping_activated=True,
-    stopping_params=ParamParada(alpha=0.05, eps=0.02, eta=0.08, paciencia=15),
+    stopping_params=ParamParada(alpha=0.05, xi=0.02, eta=0.08, paciencia=15),
 )
 crfe.fit(X_tr, Y_tr, X_cal, Y_cal)
 
